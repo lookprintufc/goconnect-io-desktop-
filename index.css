@@ -1,0 +1,180 @@
+html,
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial,
+    sans-serif;
+  color: #424246;
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+input {
+  outline: none;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-center {
+  justify-content: center;
+  align-items: center;
+}
+
+.flex-space-between {
+  justify-content: space-between;
+  align-items: center;
+}
+
+.flex-space-evenly {
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.padding-20 {
+  padding: 20px;
+}
+
+#qr-code-reader__dashboard_section {
+  background: #005baa;
+  color: white;
+  padding: 5px;
+}
+
+[alt="Info icon"] {
+  display: none;
+}
+
+#qr-code-reader__dashboard_section > div {
+  display: flex;
+  flex-direction: column !important;
+}
+
+#qr-code-reader__dashboard_section button,
+select {
+  padding: 5px;
+  font-size: 15px;
+}
+
+.gnfc {
+  height: 100vh;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.gnfc-status {
+  padding: 10px;
+  border-radius: 5px;
+  margin-left: 5px;
+}
+
+.gnfc-status--green {
+  background: green;
+  color: white;
+}
+
+.gnfc-status--red {
+  background: rgb(232, 82, 82);
+  color: white;
+}
+
+.gnfc-tab--left {
+}
+
+.gnfc-tab--right {
+  background: #f37053;
+  color: black;
+}
+
+@media (max-width: 1180px) {
+  .gnfc-tab--left {
+    padding-top: 150px;
+  }
+
+  .gnfc-tab--right {
+  }
+}
+
+.gnfc-tab__header {
+  background: rgba(255, 255, 255, 0.8);
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.gnfc-tab--left .gnfc-tab__header {
+  position: absolute;
+  color: white;
+  top: 20px;
+  background: #005baa;
+  -webkit-box-shadow: 5px 5px 0px 0px #289fed, 10px 10px 0px 0px #5fb8ff,
+    15px 15px 0px 0px #a1d8ff, 20px 20px 0px 0px #cae6ff,
+    25px 25px 0px 0px #e1eeff, 5px 5px 15px 5px rgba(0, 0, 0, 0);
+  box-shadow: 5px 5px 0px 0px #289fed, 10px 10px 0px 0px #5fb8ff,
+    15px 15px 0px 0px #a1d8ff, 20px 20px 0px 0px #cae6ff,
+    25px 25px 0px 0px #e1eeff, 5px 5px 15px 5px rgba(0, 0, 0, 0);
+}
+
+.gnfc-tab__article {
+  max-width: 400px;
+  width: 100%;
+  height: 400px;
+  background: white;
+  border-radius: 15px;
+  position: relative;
+  margin: 20px;
+}
+
+.gnfc-tab__article > div {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 15px;
+  background: rgb(232, 82, 82);
+  color: white;
+  border-bottom-right-radius: 15px;
+  border-bottom-left-radius: 15px;
+  font-weight: bold;
+}
+
+.gnfc-tab__article {
+  text-align: center;
+}
+
+.gnfc-tab__footer {
+  width: 100%;
+}
+
+.gnfc-tab__footer-button {
+  padding: 20px;
+  border-radius: 10px;
+  width: 200px;
+  background: #005baa;
+  color: white;
+  font-size: 17px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.gnfc-tab__footer-button--right {
+  background: #e9ed9a;
+  color: inherit;
+}
+
+.gnfc-tab__footer-button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}

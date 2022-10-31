@@ -1,0 +1,71 @@
+<head>
+  <meta charset="UTF-8" />
+  <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+
+  <title>GoConnect IO</title>
+  <link rel="stylesheet" type="text/css" href="index.css" />
+</head>
+<body>
+  <main class="gnfc flex">
+    <section
+      class="gnfc-tab gnfc-tab--left flex-column flex-center flex-1 padding-20"
+    >
+      <header class="gnfc-tab__header flex flex-center">
+        <h1>GOCONNECT IO</h1>
+      </header>
+      <div id="qr-code-reader" width="600px" height="600px"></div>
+    </section>
+    <section
+      class="gnfc-tab gnfc-tab--right flex-column flex-space-between flex-1 padding-20"
+    >
+      <header class="gnfc-tab__header flex flex-center">
+        <h1>
+          STATUS DO LEITOR NFC:
+          <span class="gnfc-status gnfc-status--red">DESCONECTADO</span>
+        </h1>
+      </header>
+      <article class="gnfc-tab__article flex flex-center">
+        <h1>{{ resultContent || "LEIA UM QRCODE PARA GRAVAR O CONTEÚDO!" }}</h1>
+        <div>
+          <div v-if="!resultContent">LEITURA DO QRCODE PENDENTE</div>
+          <div v-if="resultContent && !savedContent">
+            GRAVAÇÃO DO NFC PENDENTE
+          </div>
+          <div v-if="resultContent && savedContent">
+            IMPRESSÃO DA ETIQUETA PENDENTE
+          </div>
+        </div>
+      </article>
+      <footer class="gnfc-tab__footer flex flex-space-evenly">
+        <button
+          :title="!resultContent ? 'Leia um QRCODE antes' : null"
+          :disabled="!resultContent || savedContent"
+          class="gnfc-tab__footer-button"
+          @click="saveContent"
+        >
+          GRAVAR NFC
+        </button>
+        <button
+          :title="!savedContent ? 'Grave o NFC' : null"
+          :disabled="!savedContent"
+          class="gnfc-tab__footer-button gnfc-tab__footer-button--right"
+          @click="printLabel"
+        >
+          IMPRIMIR LABEL
+        </button>
+      </footer>
+    </section>
+  </main>
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+  <script>
+    function onScanSuccess(decodedText, decodedResult) {
+      // Handle on success condition with the decoded message.
+      console.log(`Scan result ${decodedText}`, decodedResult);
+    }
+    var html5QrcodeScanner = new Html5QrcodeScanner("qr-code-reader", {
+      fps: 10,
+      qrbox: 400,
+    });
+    html5QrcodeScanner.render(onScanSuccess);
+  </script>
+</body>
