@@ -13,41 +13,55 @@
       <header class="gnfc-tab__header flex flex-center">
         <h1>GOCONNECT IO</h1>
       </header>
-      <div id="qr-code-reader" width="600px" height="600px"></div>
+      <div id="qr-code-reader" width="400px" height="400px"></div>
     </section>
     <section
       class="gnfc-tab gnfc-tab--right flex-column flex-space-between flex-1 padding-20"
     >
       <header class="gnfc-tab__header flex flex-center">
-        <h1>
-          STATUS DO LEITOR NFC:
-          <span class="gnfc-status gnfc-status--red">DESCONECTADO</span>
-        </h1>
+        <h2>
+          <span>STATUS DO LEITOR NFC:</span>
+          <span id="reader-status" class="gnfc-status gnfc-status--red"
+            >DESCONECTADO</span
+          >
+        </h2>
+        <h2>
+          <span>STATUS DO CARTAO NFC:</span>
+          <span id="card-status" class="gnfc-status gnfc-status--red"
+            >DESCONECTADO</span
+          >
+        </h2>
       </header>
       <article class="gnfc-tab__article flex flex-center">
-        <h1>{{ resultContent || "LEIA UM QRCODE PARA GRAVAR O CONTEÚDO!" }}</h1>
-        <div>
-          <div v-if="!resultContent">LEITURA DO QRCODE PENDENTE</div>
-          <div v-if="resultContent && !savedContent">
-            GRAVAÇÃO DO NFC PENDENTE
+        <h1 id="qrcode-content">
+          STATUS DO PROCESSO
+          <br>
+          <small>Inicie apontando o QR Code para Câmera</small>
+        </h1>
+        <div class="gnfc-tab__article-status flex">
+          <div id="qrcode-read-status" class="gnfc-status--red">
+            LEITURA DO QRCODE
           </div>
-          <div v-if="resultContent && savedContent">
-            IMPRESSÃO DA ETIQUETA PENDENTE
+          <div id="nfc-write-status" class="gnfc-status--red">
+            GRAVAÇÃO DO NFC
+          </div>
+          <div id="label-status" class="gnfc-status--red">
+            IMPRESSÃO DA ETIQUETA
           </div>
         </div>
       </article>
       <footer class="gnfc-tab__footer flex flex-space-evenly">
         <button
-          :title="!resultContent ? 'Leia um QRCODE antes' : null"
-          :disabled="!resultContent || savedContent"
+          :title="Leia um QRCODE antes"
+          disabled="true"
           class="gnfc-tab__footer-button"
-          @click="saveContent"
+          id="write-nfc"
         >
           GRAVAR NFC
         </button>
         <button
-          :title="!savedContent ? 'Grave o NFC' : null"
-          :disabled="!savedContent"
+          :title="Grave o NFC"
+          disabled="true"
           class="gnfc-tab__footer-button gnfc-tab__footer-button--right"
           @click="printLabel"
         >
@@ -58,14 +72,35 @@
   </main>
   <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
   <script>
+    const replaceText = (selector, text) => {
+      const element = document.getElementById(selector);
+      if (element) element.innerText = text;
+    };
+
+    const replaceClasses = (selector, classOne, classTwo) => {
+      const element = document.getElementById(selector);
+      if (element) {
+        element.classList.remove(classOne);
+        element.classList.add(classTwo);
+      }
+    };
+
     function onScanSuccess(decodedText, decodedResult) {
       // Handle on success condition with the decoded message.
-      console.log(`Scan result ${decodedText}`, decodedResult);
+      console.log(`Qr code result ${decodedText}`, decodedResult);
+      replaceText("qrcode-content", decodedText);
+      replaceClasses(
+        "qrcode-read-status",
+        "gnfc-status--red",
+        "gnfc-status--green"
+      );
+      document.getElementById('write-nfc').disabled = false
     }
     var html5QrcodeScanner = new Html5QrcodeScanner("qr-code-reader", {
-      fps: 10,
-      qrbox: 400,
+      fps: 30,
+      qrbox: {width: 250, height: 250}
     });
     html5QrcodeScanner.render(onScanSuccess);
+
   </script>
 </body>

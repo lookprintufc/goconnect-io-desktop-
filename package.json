@@ -10,5 +10,10 @@
   },
   "devDependencies": {
     "electron": "^21.2.0"
+  },
+  "dependencies": {
+    "@taptrack/ndef": "^1.0.3",
+    "electron-rebuild": "^3.2.9",
+    "nfc-pcsc": "^0.8.1"
   }
 }
