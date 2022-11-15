@@ -1,7 +1,7 @@
 const { app, BrowserWindow, ipcMain } = require('electron')
 const path = require('path')
 
-const { NFC, KEY_TYPE_A } = require('nfc-pcsc');
+const { NFC, KEY_TYPE_B } = require('nfc-pcsc');
 const nfc = new NFC();
 const ndef = require('@taptrack/ndef');
 
@@ -32,16 +32,16 @@ app.on('window-all-closed', () => {
 })
 
 
-const encapsulate = (data, blockSize = 4) => {
+const encapsulate = (data, blockSize = 16) => {
   if (data.length > 0xfffe) {
     throw new Error('Maximal NDEF message size exceeded.');
   }
 
-  const prefix = Buffer.allocUnsafe(16);
+  const prefix = Buffer.allocUnsafe(data.length > 0xfe ? 4 : 2);
   prefix[0] = 0x03; // NDEF type
   if (data.length > 0xfe) {
     prefix[1] = 0xff;
-    prefix.writeInt32BE(data.length, 0);
+    prefix.writeInt16BE(data.length, 2);
   } else {
     prefix[1] = data.length;
   }
@@ -52,8 +52,9 @@ const encapsulate = (data, blockSize = 4) => {
   const excessLength = totalLength % blockSize;
   const rightPadding = excessLength > 0 ? blockSize - excessLength : 0;
   const newLength = totalLength + rightPadding;
-
+	
   return Buffer.concat([prefix, data, suffix], newLength);
+
 };
 
 let readers = [];
@@ -88,7 +89,7 @@ nfc.on('reader', reader => {
     })
 
     const key = 'FFFFFFFFFFFF'; 
-    const keyType = KEY_TYPE_A;
+    const keyType = KEY_TYPE_B;
 
     try {
       await reader.authenticate(4, keyType, key),
@@ -129,12 +130,14 @@ nfc.on('reader', reader => {
           // var result = processData(dataprocess);
           // event.sender.send('actionReply', result);
 
-          const textRecord = ndef.Utils.createUriRecord("gocase.me");
-          const message = new ndef.Message([textRecord]);
-          const bytes = message.toByteArray();
-          const data = encapsulate(Buffer.from(bytes.buffer));
-    
-          const res4 = await reader.write(4, data, 16);
+          const textRecord = ndef.Utils.createUriRecord("https://www.gocase.com.br");
+      const message = new ndef.Message([textRecord]);
+      const bytes = message.toByteArray();
+      // convert the Uint8Array into to the Buffer and encapsulate it
+      const data = encapsulate(Buffer.from(bytes.buffer));
+
+      // data is instance of Buffer containing encapsulated NDEF message
+      const res4 = await reader.write(4, data, 16);
           console.log('result', { res4 })
     
           win.webContents.send('card_write', {
