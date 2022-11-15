@@ -72,6 +72,14 @@ nfc.on('reader', reader => {
 
   reader.on('card', async card => {
 
+    console.log(card.type)
+    if (card.type !== 'TAG_ISO_14443_3') {
+      win.webContents.send('card_detected', {
+        status: false,
+        message: 'NAO SUPORTADO'
+      })
+			return;
+		}
 
     console.info(`card detected`, { reader: reader.name, card });
     win.webContents.send('card_detected', {
@@ -83,9 +91,7 @@ nfc.on('reader', reader => {
     const keyType = KEY_TYPE_A;
 
     try {
-      await Promise.all([
-        reader.authenticate(4, keyType, key),
-      ]);
+      await reader.authenticate(4, keyType, key),
 
       console.info(`blocks successfully authenticated`);
       win.webContents.send('card_authenticated', {
