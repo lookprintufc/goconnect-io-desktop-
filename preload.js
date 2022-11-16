@@ -29,15 +29,23 @@ window.addEventListener('DOMContentLoaded', () => {
     replaceText('card-status', result.message)
     if(result.status) replaceClasses('card-status', 'gnfc-status--red', 'gnfc-status--green')
     else replaceClasses('card-status', 'gnfc-status--green', 'gnfc-status--red')
-    document.getElementById('write-nfc').disabled = false
   })
 
   ipcRenderer.on('card_authenticated', (event, result) => {
     console.info(event, result, 'card_authenticated')
+    if(!result.status) {
+      alert(result.message)
+      return
+    }
+
+    if(document.getElementById('qrcode-read-status').classList.contains('gnfc-status--green')) {
+      document.getElementById('write-nfc').disabled = false
+    }
   })
 
   ipcRenderer.on('card_read', (event, result) => {
     console.info(event, result, 'card_read')
+    if(!result.status) alert(result.message)
   })
 
   ipcRenderer.on('card_write', (event, result) => {
@@ -51,9 +59,6 @@ window.addEventListener('DOMContentLoaded', () => {
   console.log('writeNfcButton', writeNfcButton)
   writeNfcButton.addEventListener('click', function(){
     console.log('write nfc front')
-      ipcRenderer.once('actionReply', function(event, response){
-          processResponse(response);
-      })
-      ipcRenderer.send('invokeAction', 'someData');
+    ipcRenderer.send('writeCartAction', document.getElementById('qrcode-content').innerText);
   });
 })

@@ -94,7 +94,10 @@
         "gnfc-status--red",
         "gnfc-status--green"
       );
-      document.getElementById('write-nfc').disabled = false
+      
+      if(document.getElementById('card-status').classList.contains('gnfc-status--green')) {
+        document.getElementById('write-nfc').disabled = false
+      }
     }
     var html5QrcodeScanner = new Html5QrcodeScanner("qr-code-reader", {
       fps: 30,

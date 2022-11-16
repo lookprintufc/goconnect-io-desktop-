@@ -57,7 +57,6 @@ const encapsulate = (data, blockSize = 16) => {
 
 };
 
-let readers = [];
 nfc.on('reader', reader => {
   console.info(`device attached`, { reader: reader.name });
   setTimeout(()=> {
@@ -65,15 +64,12 @@ nfc.on('reader', reader => {
       status: true,
       message: 'CONECTADO'
     })
-  }, 1000)
-
-  readers.push(reader);
+  }, 1500)
 
   // reader.aid = 'F222222222';
 
   reader.on('card', async card => {
-
-    console.log(card.type)
+    // NPX - MIFARE CLASSIC 1K
     if (card.type !== 'TAG_ISO_14443_3') {
       win.webContents.send('card_detected', {
         status: false,
@@ -122,28 +118,26 @@ nfc.on('reader', reader => {
 
 
     try {
-
-
-
-      ipcMain.on('invokeAction', async (event, dataprocess) => {
+      ipcMain.on('writeCartAction', async (event, dataAct) => {
+        console.log(dataAct)
         console.log('invoke main')
-          // var result = processData(dataprocess);
-          // event.sender.send('actionReply', result);
+        // var result = processData(dataprocess);
+        // event.sender.send('actionReply', result);
 
-          const textRecord = ndef.Utils.createUriRecord("https://www.gocase.com.br");
-      const message = new ndef.Message([textRecord]);
-      const bytes = message.toByteArray();
-      // convert the Uint8Array into to the Buffer and encapsulate it
-      const data = encapsulate(Buffer.from(bytes.buffer));
+        const textRecord = ndef.Utils.createUriRecord(dataAct);
+        const message = new ndef.Message([textRecord]);
+        const bytes = message.toByteArray();
+        // convert the Uint8Array into to the Buffer and encapsulate it
+        const data = encapsulate(Buffer.from(bytes.buffer));
 
-      // data is instance of Buffer containing encapsulated NDEF message
-      const res4 = await reader.write(4, data, 16);
-          console.log('result', { res4 })
+        // data is instance of Buffer containing encapsulated NDEF message
+        const res4 = await reader.write(4, data, 16);
+        console.log('result', { res4 })
     
-          win.webContents.send('card_write', {
-            status: true,
-            message: 'Cartao gravado com sucesso.'
-          })
+        win.webContents.send('card_write', {
+          status: true,
+          message: 'Cartao gravado com sucesso.'
+        })
       });
     } catch (err) {
       win.webContents.send('card_write', {
@@ -159,7 +153,7 @@ nfc.on('reader', reader => {
       })
       win.webContents.send('card_authenticated', {
         status: false,
-        message: 'Falha na autenticacao.'
+        message: 'Falha na Autenticacao.'
       })
       return;
     }
@@ -185,9 +179,5 @@ nfc.on('reader', reader => {
       status: false,
       message: 'DESCONECTADO'
     })
-    delete readers[readers.indexOf(reader)];
-
-    console.log(readers);
-
   });
 });
