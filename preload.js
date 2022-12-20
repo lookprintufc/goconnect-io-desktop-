@@ -28,7 +28,13 @@ window.addEventListener('DOMContentLoaded', () => {
     console.info(event, result, 'card_detected')
     replaceText('card-status', result.message)
     if(result.status) replaceClasses('card-status', 'gnfc-status--red', 'gnfc-status--green')
-    else replaceClasses('card-status', 'gnfc-status--green', 'gnfc-status--red')
+    else {
+      replaceClasses('card-status', 'gnfc-status--green', 'gnfc-status--red')
+      replaceText("qrcode-content", '');
+      replaceClasses('nfc-write-status', 'gnfc-status--green', 'gnfc-status--red')
+      replaceClasses('qrcode-read-status', 'gnfc-status--green', 'gnfc-status--red')
+      document.getElementById('write-nfc').disabled = true
+    }
   })
 
   ipcRenderer.on('card_authenticated', (event, result) => {

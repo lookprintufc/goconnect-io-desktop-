@@ -6,7 +6,8 @@
   "author": "Adenilson Santos",
   "license": "MIT",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "rebuild": "electron-rebuild"
   },
   "devDependencies": {
     "electron": "^21.2.0"
