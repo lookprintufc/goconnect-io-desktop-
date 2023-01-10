@@ -7,14 +7,22 @@
   "license": "MIT",
   "scripts": {
     "start": "electron .",
-    "rebuild": "electron-rebuild"
+    "rebuild": "electron-rebuild",
+    "build": "electron-builder --mac"
+  },
+  "build": {
+    "appId": "com.gocase.goconnect-io-desktop",
+    "mac": {
+      "category": "public.app-category.utilities",
+      "target": ["dmg"]
+    }
   },
   "devDependencies": {
-    "electron": "^21.2.0"
+    "electron": "^21.2.0",
+    "electron-builder": "^23.6.0"
   },
   "dependencies": {
     "@taptrack/ndef": "^1.0.3",
-    "electron-rebuild": "^3.2.9",
     "nfc-pcsc": "^0.8.1"
   }
 }
