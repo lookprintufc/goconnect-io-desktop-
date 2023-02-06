@@ -10,20 +10,22 @@
     "rebuild": "electron-rebuild",
     "build": "electron-builder --mac",
     "pack": "electron-builder --dir",
-    "dist": "electron-builder"
+    "dist": "electron-builder",
+    "postinstall": "electron-builder install-app-deps"
   },
   "build": {
     "appId": "com.gocase.goconnect-io-desktop",
-    "mac": {
-      "category": "public.app-category.utilities",
-      "target": [
-        "dmg"
-      ]
+    "productName": "Goconnect IO Desktop",
+    "target": "NSIS",
+   
+    "nsis": {
+      "allowToChangeInstallationDirectory": true,
+      "oneClick": false
     }
   },
   "devDependencies": {
     "electron": "^21.2.0",
-    "electron-builder": "^23.6.0",
+    "electron-builder": "~22.10.5",
     "electron-rebuild": "^3.2.9"
   },
   "dependencies": {
