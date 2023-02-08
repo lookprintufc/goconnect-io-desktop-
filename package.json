@@ -17,7 +17,7 @@
     "appId": "com.gocase.goconnect-io-desktop",
     "productName": "Goconnect IO Desktop",
     "target": "NSIS",
-   
+    "icon": "icon.png",
     "nsis": {
       "allowToChangeInstallationDirectory": true,
       "oneClick": false
