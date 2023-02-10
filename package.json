@@ -9,6 +9,9 @@
     "start": "electron .",
     "rebuild": "electron-rebuild",
     "build": "electron-builder --linux",
+    "build_linux": "electron-builder --linux",
+    "build_windows": "electron-builder --win",
+    "build_max": "electron-builder --mac",
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
     "postinstall": "electron-builder install-app-deps"
